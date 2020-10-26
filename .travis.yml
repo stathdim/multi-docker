@@ -1,3 +1,5 @@
+language: generic
+
 services:
   - docker
 
@@ -12,7 +14,7 @@ after_success:
   - docker build -t stathisdim/multi-server -f ./server/ ./server
   - docker build -t stathisdim/multi-worker -f ./worker/ ./worker
   - docker build -t stathisdim/multi-nginx -f ./nginx/ ./nginx
-  - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   - docker push stathisdim/multi-client
   - docker push stathisdim/multi-server
   - docker push stathisdim/multi-worker
