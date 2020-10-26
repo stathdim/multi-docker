@@ -1,0 +1,19 @@
+services:
+  - docker
+
+before_install:
+  - docker build -t stathisdim/client-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true stathisdim/client-test npm test
+
+after_success:
+  - docker build -t stathisdim/multi-client -f ./client/ ./client
+  - docker build -t stathisdim/multi-server -f ./server/ ./server
+  - docker build -t stathisdim/multi-worker -f ./worker/ ./worker
+  - docker build -t stathisdim/multi-nginx -f ./nginx/ ./nginx
+  - docker login -u "$DOCKER_ID" -p "$DOCKER_PASSWORD"
+  - docker push stathisdim/multi-client
+  - docker push stathisdim/multi-server
+  - docker push stathisdim/multi-worker
+  - docker push stathisdim/multi-nginx
