@@ -19,3 +19,15 @@ after_success:
   - docker push stathisdim/multi-server
   - docker push stathisdim/multi-worker
   - docker push stathisdim/multi-nginx
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'eu-west-1'
+  app: 'multi-docker'
+  env: 'MultiDocker-env'
+  bucket-name: 'elasticbeanstalk-eu-west-1-716381338538'
+  bucket_path: 'docker-multi'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
